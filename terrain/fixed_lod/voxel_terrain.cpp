@@ -1863,9 +1863,9 @@ void VoxelTerrain::_bind_methods() {
 	// TODO Add back access to block, but with an API securing multithreaded access
 	ADD_SIGNAL(MethodInfo(VoxelStringNames::get_singleton().block_loaded, PropertyInfo(Variant::VECTOR3, "position")));
 	ADD_SIGNAL(
-		MethodInfo(VoxelStringNames::get_singleton().block_unloaded, PropertyInfo(Variant::VECTOR3, "position")));
+			MethodInfo(VoxelStringNames::get_singleton().block_unloaded, PropertyInfo(Variant::VECTOR3, "position")));
 	ADD_SIGNAL(
-		MethodInfo(VoxelStringNames::get_singleton().mesh_block_loaded, PropertyInfo(Variant::VECTOR3, "position")));
+			MethodInfo(VoxelStringNames::get_singleton().mesh_block_loaded, PropertyInfo(Variant::VECTOR3, "position")));
 	ADD_SIGNAL(MethodInfo(
 			VoxelStringNames::get_singleton().mesh_block_unloaded, PropertyInfo(Variant::VECTOR3, "position")));
 }
