@@ -179,6 +179,8 @@ private:
 
 	void emit_data_block_loaded(const VoxelDataBlock &block, Vector3i bpos);
 	void emit_data_block_unloaded(const VoxelDataBlock &block, Vector3i bpos);
+	void emit_mesh_block_loaded(Vector3i bpos);
+	void emit_mesh_block_unloaded(Vector3i bpos);
 
 	bool try_get_paired_viewer_index(uint32_t id, size_t &out_i) const;
 

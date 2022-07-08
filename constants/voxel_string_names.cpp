@@ -28,6 +28,8 @@ VoxelStringNames::VoxelStringNames() {
 
 	block_loaded = StaticCString::create("block_loaded");
 	block_unloaded = StaticCString::create("block_unloaded");
+	mesh_block_loaded = StaticCString::create("mesh_block_loaded");
+	mesh_block_unloaded = StaticCString::create("mesh_block_unloaded");
 
 	store_colors_in_texture = StaticCString::create("store_colors_in_texture");
 	scale = StaticCString::create("scale");
