@@ -1,5 +1,6 @@
 #include "voxel_terrain_editor_plugin.h"
 #include "../../generators/voxel_generator.h"
+#include "../../server/voxel_server_gd.h"
 #include "../../storage/modifiers_gd.h"
 #include "../../terrain/fixed_lod/voxel_terrain.h"
 #include "../../terrain/variable_lod/voxel_lod_terrain.h"
@@ -77,10 +78,14 @@ void VoxelTerrainEditorPlugin::_notification(int p_what) {
 			VoxelServer::get_singleton().set_viewer_distance(_editor_viewer_id, 512);
 			// No collision needed in editor, also it updates faster without
 			VoxelServer::get_singleton().set_viewer_requires_collisions(_editor_viewer_id, false);
+
+			_inspector_plugin.instantiate();
+			add_inspector_plugin(_inspector_plugin);
 			break;
 
 		case NOTIFICATION_EXIT_TREE:
 			VoxelServer::get_singleton().remove_viewer(_editor_viewer_id);
+			remove_inspector_plugin(_inspector_plugin);
 			break;
 
 		case NOTIFICATION_PROCESS:
@@ -161,6 +166,7 @@ void VoxelTerrainEditorPlugin::set_node(VoxelNode *node) {
 
 		if (vlt != nullptr) {
 			vlt->debug_set_draw_enabled(true);
+			vlt->debug_set_draw_flag(VoxelLodTerrain::DEBUG_DRAW_VOLUME_BOUNDS, true);
 			vlt->debug_set_draw_flag(VoxelLodTerrain::DEBUG_DRAW_OCTREE_NODES, _show_octree_nodes);
 			vlt->debug_set_draw_flag(VoxelLodTerrain::DEBUG_DRAW_OCTREE_BOUNDS, _show_octree_bounds);
 			vlt->debug_set_draw_flag(VoxelLodTerrain::DEBUG_DRAW_MESH_UPDATES, _show_mesh_updates);
@@ -194,6 +200,8 @@ EditorPlugin::AfterGUIInput VoxelTerrainEditorPlugin::forward_spatial_gui_input(
 
 	if (_editor_viewer_follows_camera) {
 		VoxelServer::get_singleton().set_viewer_position(_editor_viewer_id, _editor_camera_last_position);
+		gd::VoxelServer::get_singleton()->set_editor_camera_info(
+				_editor_camera_last_position, get_forward(p_camera->get_global_transform()));
 	}
 
 	return EditorPlugin::AFTER_GUI_INPUT_PASS;

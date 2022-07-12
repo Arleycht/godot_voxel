@@ -21,6 +21,7 @@ Godot 4 is required from this version.
     - Added `ZN_ThreadedTask` to allow running custom tasks using the thread pool system
     - Added `VoxelMeshSDF` to bake SDF from meshes, which can be used in voxel sculpting.
     - Mesh resources are now fully built on threads with the Godot Vulkan renderer
+    - Editor: terrain bounds are now shown in the inspector as min/max instead of position/size
     - `VoxelGeneratorGraph`: added support for outputting to the TYPE channel, allowing use with `VoxelMesherBlocky`
     - `VoxelGeneratorGraph`: editor: unconnected inputs show their default value directly on the node
     - `VoxelGeneratorGraph`: editor: allow to change the axes on preview nodes 3D slices
@@ -57,27 +58,29 @@ Godot 4 is required from this version.
     - `VoxelBoxMover`: added basic support for stair climbing
 
 - Fixes
+    - `VoxelBlockyModel`: properties of the inspector were not refreshed when changing `geometry_type`
     - `VoxelBuffer`: frequently creating buffers with always different sizes no longer wastes memory
-    - `Voxel`: properties of the inspector were not refreshed when changing `geometry_type`
     - `VoxelGeneratorGraph`: editor: fix inspector starting to throw errors after deleting a node, as it is still inspecting it
     - `VoxelGeneratorGraph`: editor: fixed crash when connecting an SdfPreview node to an input. However this is not supported yet.
     - `VoxelGeneratorGraph`: fixed Image2D node not accepting image formats L8 and LA8
     - `VoxelGeneratorGraph`: fixed memory leaks when the graph contains resources
     - `VoxelGeneratorFlat`: fixed underground SDF values being 0 instead of negative
+    - `VoxelInstancer`: fix instances not refreshing when an item is modified and the mesh block size is 32
+    - `VoxelInstancer`: fix crash when removing an item from the library while an instancer node is using it
+    - `VoxelInstancer`: fix errors when removing scene instances
+    - `VoxelLodTerrain`: fix `lod_fade_duration` property was not accepting decimal numbers
+    - `VoxelLodTerrain`: Cracks no longer appear at seams when LOD fading is enabled
     - `VoxelMesherCubes`: editor: color mode is now a proper dropdown
     - `VoxelMesherCubes`: fixed raw color mode not working properly
     - `VoxelMesherCubes`: wrong alpha check between transparent and solid cubes
     - `VoxelMesherTransvoxel`: fixed surface not appearing if it lines up exactly at integer coordinates
     - `VoxelMesherTransvoxel`: fixed occasional holes and "spikes" in geometry in some specific configurations
+    - `VoxelStreamScript`: fix voxel data not getting retrieved when `BLOCK_FOUND` is returned
     - `VoxelTerrain`: fixed `Condition "mesh_block == nullptr" is true` which could happen in some conditions
     - `VoxelTerrain`: changing a material now updates existing meshes instead of only new ones
     - `VoxelTool`: `raycast` locking up if you send a Vector3 containing NaN
     - `VoxelToolLodTerrain`: fix inconsistent result with integer `do_sphere` radius
     - `VoxelToolTerrain`: `run_blocky_random_tick` no longer snaps area borders to chunk borders in unintuitive ways
-    - `VoxelInstancer`: fix instances not refreshing when an item is modified and the mesh block size is 32
-    - `VoxelInstancer`: fix crash when removing an item from the library while an instancer node is using it
-    - `VoxelInstancer`: fix errors when removing scene instances
-    - `VoxelStreamScript`: fix voxel data not getting retrieved when `BLOCK_FOUND` is returned
 
 - Breaking changes
     - Some functions now take `Vector3i` instead of `Vector3`. If you used to send `Vector3` without `floor()` or `round()`, it can have side-effects in negative coordinates.
@@ -101,7 +104,6 @@ Godot 4 is required from this version.
 - Known issues
     - Some nodes and resources no longer start with predefined properties due to a warning introduced in Godot4 when properties are resources.
     - SDFGI does not work all the time and can only be forced to update by moving away and coming back, pre-generating the terrain, or toggling it off and on. This is a limitation of Godot not supporting well meshes created dynamically.
-    - Moving fast near a terrain with mesh size 16 can cause more noticeable slowdowns compared to Godot3. This is because Godot's Vulkan allocator is much slower to free mesh buffers. A mitigation is in place to smooth the slowdown but it is not avoidable.
 
 
 0.5.x - Legacy Godot 3 branch - `godot3.x`
